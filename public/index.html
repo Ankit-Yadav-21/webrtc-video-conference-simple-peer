@@ -43,17 +43,11 @@
             #videos {
                 grid-template-columns: 1fr 1fr;
             }
-            #localVideo{
-                width: '50%'
-            }
         }
 
         @media (min-width: 768px) {
             #videos {
                 grid-template-columns: 1fr 1fr 1fr;
-            }
-            #localVideo{
-                width: '33%'
             }
         }
 
@@ -61,16 +55,13 @@
             #videos {
                 grid-template-columns: 1fr 1fr 1fr 1fr;
             }
-            #localVideo{
-                width: '25%'
-            }
         }
     </style>
 </head>
 
 <body>
     <div id="videos" class="container">
-        <video id="localVideo" class="vid" playsinline autoplay muted></video>
+        <video id="localVideo" style="width:100%;" class="vid" playsinline autoplay muted></video>
     </div>
     <br />
     <div style="display:block">
