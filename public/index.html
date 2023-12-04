@@ -32,11 +32,44 @@
             margin: 2px 2px;
             cursor: pointer;
         }
+
+        #videos {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 576px) {
+            #videos {
+                grid-template-columns: 1fr 1fr;
+            }
+            #localVideo{
+                width: '50%'
+            }
+        }
+
+        @media (min-width: 768px) {
+            #videos {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+            #localVideo{
+                width: '33%'
+            }
+        }
+
+        @media (min-width: 992px) {
+            #videos {
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+            }
+            #localVideo{
+                width: '25%'
+            }
+        }
     </style>
 </head>
 
 <body>
-    <div id="videos" class="container" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 20px;">
+    <div id="videos" class="container">
         <video id="localVideo" class="vid" playsinline autoplay muted></video>
     </div>
     <br />
