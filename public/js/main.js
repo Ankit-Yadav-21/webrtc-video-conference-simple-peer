@@ -73,14 +73,10 @@ constraints.video.facingMode = {
 }
 
 // Check for browser-specific getUserMedia methods
-navigator.getUserMedia =
-    navigator.mediaDevices.getUserMedia ||
-    navigator.mediaDevices.webkitGetUserMedia ||
-    navigator.mediaDevices.mozGetUserMedia ||
-    navigator.mediaDevices.msGetUserMedia;
+navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
 
 // enabling the camera at startup
-navigator.getUserMedia(constraints).then(stream => {
+navigator.mediaDevices.getUserMedia(constraints).then(stream => {
     console.log('Received local stream');
 
     localVideo.srcObject = stream;
@@ -198,7 +194,7 @@ function switchMedia() {
     })
 
     localVideo.srcObject = null
-    navigator.getUserMedia(constraints).then(stream => {
+    navigator.mediaDevices.getUserMedia(constraints).then(stream => {
 
         for (let socket_id in peers) {
             for (let index in peers[socket_id].streams[0].getTracks()) {
