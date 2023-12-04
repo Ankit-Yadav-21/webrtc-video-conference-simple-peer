@@ -25,24 +25,29 @@ if(location.href.substr(0,5) !== 'https')
 const configuration = {
     // Using From https://www.metered.ca/tools/openrelay/
     "iceServers": [
-    {
-      urls: "stun:openrelay.metered.ca:80"
-    },
-    {
-      urls: "turn:openrelay.metered.ca:80",
-      username: "openrelayproject",
-      credential: "openrelayproject"
-    },
-    {
-      urls: "turn:openrelay.metered.ca:443",
-      username: "openrelayproject",
-      credential: "openrelayproject"
-    },
-    {
-      urls: "turn:openrelay.metered.ca:443?transport=tcp",
-      username: "openrelayproject",
-      credential: "openrelayproject"
-    }
+        {
+            urls: "stun:stun.relay.metered.ca:80",
+        },
+        {
+            urls: "turn:a.relay.metered.ca:80",
+            username: "9e360f34e035744ee6a225d4",
+            credential: "zXYscz+FjEaOEk0D",
+        },
+        {
+            urls: "turn:a.relay.metered.ca:80?transport=tcp",
+            username: "9e360f34e035744ee6a225d4",
+            credential: "zXYscz+FjEaOEk0D",
+        },
+        {
+            urls: "turn:a.relay.metered.ca:443",
+            username: "9e360f34e035744ee6a225d4",
+            credential: "zXYscz+FjEaOEk0D",
+        },
+        {
+            urls: "turn:a.relay.metered.ca:443?transport=tcp",
+            username: "9e360f34e035744ee6a225d4",
+            credential: "zXYscz+FjEaOEk0D",
+        },
   ]
 }
 
