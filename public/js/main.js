@@ -170,10 +170,15 @@ function addPeer(socket_id, am_initiator) {
         let newVid = document.createElement('video')
         newVid.srcObject = stream
         newVid.id = socket_id
-        newVid.playsinline = false
-        newVid.autoplay = true
+        newVid.setAttribute('playsinline', true); // Add the playsinline attribute
+        newVid.setAttribute('autoplay', true); // Autoplay might not work on iOS; consider user-triggered play
         newVid.className = "vid"
         videos.appendChild(newVid)
+
+        // Consider adding a button or gesture to trigger playback on iOS
+        newVid.addEventListener('click', () => {
+            newVid.play();
+        });
     })
 }
 
