@@ -12,7 +12,7 @@ let localStream = null;
 let peers = {}
 
 // redirect if not https
-if(location.href.substr(0,5) !== 'https') 
+if (location.href.substr(0, 5) !== 'https')
     location.href = 'https' + location.href.substr(4, location.href.length - 4)
 
 
@@ -48,7 +48,7 @@ const configuration = {
             username: "9e360f34e035744ee6a225d4",
             credential: "zXYscz+FjEaOEk0D",
         },
-  ]
+    ]
 }
 
 /**
@@ -74,10 +74,10 @@ constraints.video.facingMode = {
 
 // Check for browser-specific getUserMedia methods
 navigator.getUserMedia =
-    navigator.getUserMedia ||
-    navigator.webkitGetUserMedia ||
-    navigator.mozGetUserMedia ||
-    navigator.msGetUserMedia;
+    navigator.mediaDevices.getUserMedia ||
+    navigator.mediaDevices.webkitGetUserMedia ||
+    navigator.mediaDevices.mozGetUserMedia ||
+    navigator.mediaDevices.msGetUserMedia;
 
 // enabling the camera at startup
 navigator.getUserMedia(constraints).then(stream => {
