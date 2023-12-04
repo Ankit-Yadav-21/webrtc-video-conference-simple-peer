@@ -72,19 +72,19 @@ constraints.video.facingMode = {
     ideal: "user"
 }
 
-// Check for browser-specific getUserMedia methods
-navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
-
-// enabling the camera at startup
-navigator.mediaDevices.getUserMedia(constraints).then(stream => {
-    console.log('Received local stream');
-
+function handleSuccess(stream) {
+    window.stream = stream; // make stream available to browser console
     localVideo.srcObject = stream;
     localStream = stream;
-
     init()
+}
 
-}).catch(e => alert(`getusermedia error ${e.name}`))
+function handleError(error) {
+    console.log('navigator.MediaDevices.getUserMedia error: ', error.message, error.name);
+}
+
+// enabling the camera at startup
+navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
 
 /**
  * initialize the socket connections
