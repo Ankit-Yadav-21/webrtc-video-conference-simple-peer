@@ -72,8 +72,15 @@ constraints.video.facingMode = {
     ideal: "user"
 }
 
+// Check for browser-specific getUserMedia methods
+navigator.getUserMedia =
+    navigator.getUserMedia ||
+    navigator.webkitGetUserMedia ||
+    navigator.mozGetUserMedia ||
+    navigator.msGetUserMedia;
+
 // enabling the camera at startup
-navigator.mediaDevices.getUserMedia(constraints).then(stream => {
+navigator.getUserMedia(constraints).then(stream => {
     console.log('Received local stream');
 
     localVideo.srcObject = stream;
@@ -170,19 +177,8 @@ function addPeer(socket_id, am_initiator) {
         newVid.playsinline = false
         newVid.autoplay = true
         newVid.className = "vid"
-        newVid.onclick = () => openPictureMode(newVid)
-        newVid.ontouchstart = (e) => openPictureMode(newVid)
         videos.appendChild(newVid)
     })
-}
-
-/**
- * Opens an element in Picture-in-Picture mode
- * @param {HTMLVideoElement} el video element to put in pip mode
- */
-function openPictureMode(el) {
-    console.log('opening pip')
-    el.requestPictureInPicture()
 }
 
 /**
@@ -202,7 +198,7 @@ function switchMedia() {
     })
 
     localVideo.srcObject = null
-    navigator.mediaDevices.getUserMedia(constraints).then(stream => {
+    navigator.getUserMedia(constraints).then(stream => {
 
         for (let socket_id in peers) {
             for (let index in peers[socket_id].streams[0].getTracks()) {
