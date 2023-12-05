@@ -12,6 +12,11 @@ let localStream = null;
 let peers = {}
 
 /**
+ * Get Screen Sharing Status
+ */
+let isScreenSharing = false;
+
+/**
  * RTCPeerConnection configuration 
  */
 
@@ -49,7 +54,16 @@ const configuration = {
  */
 let constraints = {
     audio: true,
-    video: true
+    video: {
+        width: {
+            min: 200,
+            max: 300
+        },
+        height: {
+            min: 200,
+            max: 300
+        }
+    }
 }
 
 /////////////////////////////////////////////////////////
@@ -159,6 +173,7 @@ function addPeer(socket_id, am_initiator) {
         newVid.setAttribute('playsinline', true); // Add the playsinline attribute
         newVid.setAttribute('autoplay', true); // Autoplay might not work on iOS; consider user-triggered play
         newVid.className = "vid"
+        newVid.style = "width:100%;"
         videos.appendChild(newVid)
 
         // Consider adding a button or gesture to trigger playback on iOS
@@ -209,25 +224,73 @@ function switchMedia() {
  * Enable screen share
  */
 function setScreen() {
-    navigator.mediaDevices.getDisplayMedia().then(stream => {
-        for (let socket_id in peers) {
-            for (let index in peers[socket_id].streams[0].getTracks()) {
-                for (let index2 in stream.getTracks()) {
-                    if (peers[socket_id].streams[0].getTracks()[index].kind === stream.getTracks()[index2].kind) {
-                        peers[socket_id].replaceTrack(peers[socket_id].streams[0].getTracks()[index], stream.getTracks()[index2], peers[socket_id].streams[0])
-                        break;
+    if (isScreenSharing) {
+        // Stop screen sharing
+        const tracks = localStream.getTracks();
+        tracks.forEach(function (track) {
+            track.stop();
+        });
+
+        localVideo.srcObject = null;
+        isScreenSharing = false;
+
+        // Start camera streaming
+        navigator.mediaDevices.getUserMedia(constraints).then(stream => {
+            for (let socket_id in peers) {
+                for (let index in peers[socket_id].streams[0].getTracks()) {
+                    for (let index2 in stream.getTracks()) {
+                        if (peers[socket_id].streams[0].getTracks()[index].kind === stream.getTracks()[index2].kind) {
+                            peers[socket_id].replaceTrack(
+                                peers[socket_id].streams[0].getTracks()[index],
+                                stream.getTracks()[index2],
+                                peers[socket_id].streams[0]
+                            );
+                            break;
+                        }
                     }
                 }
             }
 
-        }
-        localStream = stream
+            localStream = stream;
+            localVideo.srcObject = stream;
+            screenButton.innerText = "Screen Share";
+            updateButtons();
+        });
+    } else {
+        // Start screen sharing
+        navigator.mediaDevices.getDisplayMedia().then(stream => {
+            for (let socket_id in peers) {
+                for (let index in peers[socket_id].streams[0].getTracks()) {
+                    for (let index2 in stream.getTracks()) {
+                        if (peers[socket_id].streams[0].getTracks()[index].kind === stream.getTracks()[index2].kind) {
+                            peers[socket_id].replaceTrack(
+                                peers[socket_id].streams[0].getTracks()[index],
+                                stream.getTracks()[index2],
+                                peers[socket_id].streams[0]
+                            );
+                            break;
+                        }
+                    }
+                }
+            }
+            localStream = stream;
+            localVideo.srcObject = localStream;
+            socket.emit('removeUpdatePeer', '');
 
-        localVideo.srcObject = localStream
-        socket.emit('removeUpdatePeer', '')
-    })
-    updateButtons()
+            isScreenSharing = true;
+            updateButtons();
+
+            screenButton.innerText = "Stop Share";
+
+            localVideo.srcObject.getVideoTracks()[0].onended = function () {
+                console.log("Stop Sharing")
+                setScreen()
+            };
+        });
+
+    }
 }
+
 
 /**
  * Disables and removes the local stream and all the connections to other peers.
