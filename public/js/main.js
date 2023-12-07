@@ -173,7 +173,7 @@ function addPeer(socket_id, am_initiator) {
         newVid.setAttribute('playsinline', true); // Add the playsinline attribute
         newVid.setAttribute('autoplay', true); // Autoplay might not work on iOS; consider user-triggered play
         newVid.className = "vid"
-        newVid.style = "width:100%;"
+        newVid.style = "width:100%; transform: rotateY(180deg);"
         videos.appendChild(newVid)
 
         // Consider adding a button or gesture to trigger playback on iOS
